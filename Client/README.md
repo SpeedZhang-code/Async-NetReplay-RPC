@@ -17,8 +17,8 @@ client.py          rpc_server       main_server       socket_server     web_serv
     │                   │  _port_map[cid]=port               │               │
     │                   │────────────────────────────────────────────────────►│ rpc_open_accepted
     │                   │                 │                  │               │
-    │─ get_assigned_port() (輪詢) ────────│                  │               │
-    │◄── { READY, port } ────────────────│                  │               │
+    │─ get_assigned_port() (輪詢) ──────── │                  │               │
+    │◄── { READY, port } ──────────────── │                  │               │
     │                   │                 │                  │               │
     │─ socket.connect(port) ─────────────────────────────────►│              │
     │                   │                 │                  │  accept()     │
