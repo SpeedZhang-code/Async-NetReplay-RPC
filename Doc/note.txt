@@ -1,0 +1,81 @@
+專案根目錄/
+│
+├── Server/                     # 伺服器端專案資料夾
+│   ├── pyproject.toml          # Server 的 uv 專案設定檔
+│   └── src/
+│       ├── __init__.py
+│       ├── main.py             # 伺服器進入點 (argparse, 啟動 Flask & Socket)
+│       ├── config.py           # 伺服器和基本設定檔 (如 Port、Thread 預設值)
+│       ├── web_server.py       # Flask 路由與 JSON-RPC 解析的監控中心
+│       ├── rpc_server.py       # rpc 以伺服器載體，對外提供 RPC 方法供 Client 呼叫。
+│       └── socket_server.py    # Socket 監聽與多線程封包處理
+│
+└── Client/                     # 客戶端專案資料夾
+    ├── pyproject.toml          # Client 的 uv 專案設定檔
+    └── src/
+        ├── __init__.py
+        ├── main_client.py             # 客戶端進入點 (argparse, 啟動多線程壓測)
+        └── main_client_test.py        # 測試
+        
+##########################
+
+>> cd .\Client\src\
+>> uv run .\main_client.py
+
+[*] Client_Dynamic_9527 啟動，準備與後端系統進行握手...
+
+[步驟 1] 發送 discover 請求，查詢伺服器可用方法與執行緒額度...
+    ├── 可用方法群 : ['discover', 'open_socket_service', 'get_assigned_port']
+    ├── 總執行緒上限: 3 Threads
+    ├── 目前已用額度: 0 Threads
+    ├── 伺服器狀態 : AVAILABLE
+    └── 備註       : Port is assigned by server. Call get_assigned_port after ACCEPTED.
+
+[步驟 2] 呼叫 open_socket_service，請求伺服器動態分配 Socket 通道...
+    ├── 請求回應狀態: ACCEPTED
+    └── 伺服器訊息  : Request queued. Call get_assigned_port to retrieve your assigned port.
+
+[步驟 3] 請求已受理，輪詢 get_assigned_port 等待 port 分配...
+    (最長等待 10.0s，每 0.3s 輪詢一次)
+    [✓] 取得伺服器分配的 Port: 9090
+
+[步驟 4] 開始實體 TCP 連線 ──> 127.0.0.1:9090...
+[✓] 成功連入專屬 Socket 通道！(Port: 9090)
+
+    [➔] 發送: Hello Server!
+    [內網回傳] Server Echo: Hello Server!
+
+    [➔] 發送: Heartbeat 01
+    [內網回傳] Server Echo: Heartbeat 01
+
+    [➔] 發送: Request Data Dump
+    [內網回傳] Server Echo: Request Data Dump
+
+    [➔] 發送: exit
+    [內網回傳] Server Echo: exit
+
+[-] Client 已關閉 Socket 連線。後端資源應會同步被 Main 釋放並回收 Port。
+
+
+#########################
+
+>> cd .\Server\src\
+>> uv run .\main_server.py
+
+[*] 主伺服器啟動 (PID: 11356)
+[*] 特化資源分配結果 (已強化 Flask Thread 且 RPC 控制調為 1):
+    - Flask 網頁服務 : 1 Process / 4 Thread
+    - RPC 服務   : 1 Process 內部分配：
+       ├── werkzeug: 1 Thread (RPC的載體)
+       ├── 核心控制執行緒 : 1 Thread
+       └── 預留Socket額度 : 3 Threads
+    - Socket 進程池上限 : 1 Process / 3 Threads
+[*] PortPool 初始化完成：<PortPool base=9090 capacity=3 available=3 in_use=0>[✓] 核心常駐進程群已啟動。固定 Socket 進程 PID: 9416
+[*] 主行程已進入多管道事件監聽狀態 (零 CPU 消耗)...
+[✓] RPC Server 啟動於 127.0.0.1:5000
+    Web 上報端點: http://127.0.0.1:8080/api/internal/socket-event
+[✓] 中繼主控台伺服器進程已啟動 (PID: 16848)
+[*] 主控台啟動。主執行緒: 1，Worker Pool: 3 Threads。
+[*] Socket 常駐進程已啟動，開始監聽主程式派發管道...
+ * Serving Flask app 'web_server'
+ * Debug mode: off

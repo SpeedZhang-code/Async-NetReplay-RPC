@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRV_MONITOR // CONTROL_NODE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="app">
+    <header id="header">
+      <div class="header-title">
+        <span class="blink">●</span>
+        SRV_MONITOR // CONTROL_NODE
+      </div>
+      <div class="header-meta">
+        <span><span class="dot"></span>PID: {{ pid }}</span>
+        <span>THREADS: {{ total_threads }}</span>
+        <span>POOL: {{ pool_threads }}</span>
+        <span id="clock">--:--:--</span>
+      </div>
+    </header>
+
+    <aside id="sidebar">
+      <div class="panel-title">
+        ACTIVE CLIENTS
+        <span class="count-badge" id="client-count">0</span>
+      </div>
+      <div id="client-list">
+        <div id="no-clients">
+          <div class="ascii">  ┌──────────────┐
+  │  NO CLIENTS  │
+  └──────────────┘</div>
+          <div style="margin-top:12px;font-size:11px;color:var(--text-muted)">等待連線入隊...</div>
+        </div>
+      </div>
+    </aside>
+
+    <main id="main">
+      <div id="tab-bar">
+        <div class="tab active" data-tab="global" onclick="switchTab('global')">
+          ◈ GLOBAL_STREAM
+        </div>
+      </div>
+      
+      <div id="terminal-wrap">
+        <div class="terminal active" id="term-global">
+          <div class="terminal-body thin-scroll" id="body-global"></div>
+          <div class="terminal-status">
+            <span id="global-stat">MONITORING ALL CHANNELS</span>
+            <span class="cursor">▋</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="app.js"></script>
+</body>
+</html>

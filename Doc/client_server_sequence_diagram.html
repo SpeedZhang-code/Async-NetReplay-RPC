@@ -1,0 +1,316 @@
+<style>
+.seq-wrap { 
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif; 
+  font-size: 12px; 
+  color: #333; 
+  padding: 16px 8px; 
+  overflow-x: auto; 
+  background: #fff;
+  position: relative;
+}
+/* 定義 5 欄的網格佈局 */
+.seq-cols { 
+  display: grid; 
+  grid-template-columns: 110px 130px 130px 130px 110px; 
+  gap: 0; 
+  margin-bottom: 0; 
+  position: relative;
+  z-index: 2;
+}
+.seq-head { padding: 8px 6px; border-radius: 6px; text-align: center; font-size: 12px; font-weight: bold; line-height: 1.3; }
+.h-coral  { background:#FAECE7; color:#712B13; border:1.5px solid #993C1D; }
+.h-purple { background:#EEEDFE; color:#3C3489; border:1.5px solid #534AB7; }
+.h-teal   { background:#E1F5EE; color:#085041; border:1.5px solid #0F6E56; }
+.h-amber  { background:#FAEEDA; color:#633806; border:1.5px solid #854F0B; }
+.h-blue   { background:#E6F1FB; color:#0C447C; border:1.5px solid #185FA5; }
+
+/* 繪製縱向生命線 */
+.lifelines-bg {
+  position: absolute;
+  top: 50px;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 110px 130px 130px 130px 110px;
+  pointer-events: none;
+  z-index: 1;
+}
+.line-vertical {
+  width: 0;
+  height: 100%;
+  border-left: 1.5px dashed #ccc; 
+  margin: 0 auto;
+}
+
+/* 內容列 */
+.seq-row { 
+  display: grid; 
+  grid-template-columns: 110px 130px 130px 130px 110px; 
+  align-items: center; 
+  min-height: 40px; 
+  position: relative;
+  z-index: 2;
+}
+
+/* 步驟的分隔界線區塊 */
+.seq-row.grp { 
+  min-height: 30px; 
+  margin-top: 15px; 
+  margin-bottom: 5px;
+  grid-template-columns: 1fr; /* 讓分隔線橫跨整排 */
+  border-top: 2px solid #555; /* 步驟頂部實線 */
+  padding-top: 4px;
+}
+
+.cell { padding: 3px 4px; display: flex; align-items: center; justify-content: center; }
+.pill { border-radius: 4px; padding: 4px 8px; font-size: 11px; font-weight: bold; text-align: center; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.p-coral  { background:#FAECE7; color:#712B13; border: 1px solid #993C1D; }
+.p-purple { background:#EEEDFE; color:#3C3489; border: 1px solid #534AB7; }
+.p-teal   { background:#E1F5EE; color:#085041; border: 1px solid #0F6E56; }
+.p-amber  { background:#FAEEDA; color:#633806; border: 1px solid #854F0B; }
+
+/* 強化的橫向連線與箭頭 */
+.arr-row { display: flex; align-items: center; font-size: 11px; font-weight: 500; color: #111; white-space: nowrap; gap: 4px; position: relative; }
+.arr-line { flex: 1; height: 2px; background: #222; min-width: 8px; }
+.arr-dash { flex: 1; height: 0; border-top: 2px dashed #444; min-width: 8px; }
+.arr-head { font-size: 14px; font-weight: bold; color: #222; line-height: 0; display: inline-block; margin-top: -1px; }
+.arr-lbl  { font-size: 11px; color: #222; background: rgba(255,255,255,0.9); padding: 1px 4px; border-radius: 3px; border: 0.5px solid #ddd; }
+
+.span2 { grid-column: span 2; }
+.span3 { grid-column: span 3; }
+.span4 { grid-column: span 4; }
+.span5 { grid-column: span 5; }
+
+.grp-label { font-size: 11px; color: #111; font-weight: bold; padding: 3px 8px; background: #e8e8e8; border: 1px solid #555; border-radius: 3px; width: fit-content; }
+</style>
+
+<div class="seq-wrap">
+
+  <div class="seq-cols">
+    <div class="seq-head h-coral">client.py</div>
+    <div class="seq-head h-purple">rpc_server</div>
+    <div class="seq-head h-teal">main_server</div>
+    <div class="seq-head h-amber">socket_server</div>
+    <div class="seq-head h-blue">web_server</div>
+  </div>
+
+  <div class="lifelines-bg">
+    <div class="line-vertical"></div>
+    <div class="line-vertical"></div>
+    <div class="line-vertical"></div>
+    <div class="line-vertical"></div>
+    <div class="line-vertical"></div>
+  </div>
+
+  <div class="seq-row grp"><span class="grp-label">步驟 1 — discover()</span></div>
+
+  <div class="seq-row">
+    <div class="cell"><div class="pill p-coral">discover()</div></div>
+    <div class="cell span4">
+      <div class="arr-row" style="width:100%; padding-left: 10px;">
+        <div class="arr-line"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">HTTP POST /api/rpc</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell" style="grid-column:2"></div>
+    <div class="cell span3">
+      <div class="arr-row" style="width:100%">
+        <div class="arr-dash"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">rpc_discover 上報</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell span2">
+      <div class="arr-row" style="width:100%; flex-direction:row-reverse; padding-right: 10px;">
+        <div class="arr-line"></div><div class="arr-head" style="transform:scaleX(-1)">▶</div>
+        <span class="arr-lbl">AVAILABLE / FULL</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row grp"><span class="grp-label">步驟 2 — open_socket_service()</span></div>
+
+  <div class="seq-row">
+    <div class="cell"><div class="pill p-coral">open()</div></div>
+    <div class="cell span4">
+      <div class="arr-row" style="width:100%; padding-left: 10px;">
+        <div class="arr-line"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">HTTP POST /api/rpc</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"></div>
+    <div class="cell span2">
+      <div class="arr-row" style="width:100%">
+        <div class="arr-line"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">rpc_queue.put()</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"></div>
+    <div class="cell span3">
+      <div class="arr-row" style="width:100%">
+        <div class="arr-dash"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">rpc_open_request 上報</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell span2">
+      <div class="arr-row" style="width:100%; flex-direction:row-reverse; padding-right: 10px;">
+        <div class="arr-line"></div><div class="arr-head" style="transform:scaleX(-1)">▶</div>
+        <span class="arr-lbl">status: ACCEPTED</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row grp"><span class="grp-label">main_server 內部 — PortPool.allocate()</span></div>
+
+  <div class="seq-row">
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"><div class="pill p-teal">PortPool.allocate()</div></div>
+    <div class="cell span2"></div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell">
+      <div class="arr-row" style="width:100%">
+        <div class="arr-line"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">SPAWN_THREAD</span>
+      </div>
+    </div>
+    <div class="cell"><div class="pill p-amber">bind(port)+listen()</div></div>
+    <div class="cell"></div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell span2">
+      <div class="arr-row" style="width:100%; flex-direction:row-reverse">
+        <div class="arr-line"></div><div class="arr-head" style="transform:scaleX(-1)">▶</div>
+        <span class="arr-lbl">rpc_notify_queue (port)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"></div>
+    <div class="cell"><div class="pill p-purple">_port_map[cid]=port</div></div>
+    <div class="cell span3">
+      <div class="arr-row" style="width:100%">
+        <div class="arr-dash"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">rpc_open_accepted 上報</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row grp"><span class="grp-label">步驟 3 — 輪詢 get_assigned_port</span></div>
+
+  <div class="seq-row">
+    <div class="cell"><div class="pill p-coral">poll port</div></div>
+    <div class="cell span4">
+      <div class="arr-row" style="width:100%; padding-left: 10px;">
+        <div class="arr-line"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">get_assigned_port()</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell span2">
+      <div class="arr-row" style="width:100%; flex-direction:row-reverse; padding-right: 10px;">
+        <div class="arr-line"></div><div class="arr-head" style="transform:scaleX(-1)">▶</div>
+        <span class="arr-lbl">PENDING → READY + port</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row grp"><span class="grp-label">步驟 4 — TCP 連線與訊息</span></div>
+
+  <div class="seq-row">
+    <div class="cell"><div class="pill p-coral">connect(port)</div></div>
+    <div class="cell span3">
+      <div class="arr-row" style="width:100%; padding-left: 10px;">
+        <div class="arr-line"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">socket.connect()</span>
+      </div>
+    </div>
+    <div class="cell"></div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"><div class="pill p-amber">accept()</div></div>
+    <div class="cell">
+      <div class="arr-row" style="width:100%">
+        <div class="arr-dash"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">connect</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row grp"><span class="grp-label">最終階段 — 斷線與 Port 回收</span></div>
+
+  <div class="seq-row">
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"><div class="pill p-amber">conn.close()</div></div>
+    <div class="cell">
+      <div class="arr-row" style="width:100%">
+        <div class="arr-dash"></div><div class="arr-head">▶</div>
+        <span class="arr-lbl">disconnect</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"></div><div class="cell"></div>
+    <div class="cell span2">
+      <div class="arr-row" style="width:100%; flex-direction:row-reverse">
+        <div class="arr-line"></div><div class="arr-head" style="transform:scaleX(-1)">▶</div>
+        <span class="arr-lbl">release_queue RELEASE_THREAD</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"></div><div class="cell"></div>
+    <div class="cell"><div class="pill p-teal">PortPool.release()</div></div>
+  </div>
+
+  <div class="seq-row">
+    <div class="cell"><div class="pill p-coral">socket.close()</div></div>
+  </div>
+
+  <div style="margin-top:30px; display:flex; gap:20px; font-size:11px; font-weight:bold; flex-wrap:wrap; padding-left:4px; border-top:1px solid #ddd; padding-top:12px;">
+    <span style="display:flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:30px; height:2px; background:#222"></span> 同步呼叫 / 回應 (粗實線)
+    </span>
+    <span style="display:flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:30px; height:0; border-top:2px dashed #444"></span> 非同步事件上報 (粗虛線)
+    </span>
+    <span style="display:flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:15px; height:0; border-top:1.5px dashed #ccc; transform:rotate(90deg)"></span> 縱向灰色虛線：伺服器生命線
+    </span>
+    <span style="display:flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:30px; height:0; border-top:2px solid #555"></span> 橫向深黑實線：步驟分隔界線
+    </span>
+  </div>
+
+</div>
